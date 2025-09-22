@@ -224,7 +224,7 @@ Este proyecto está bajo la Licencia MIT - ver el archivo [LICENSE](LICENSE) par
 
 ## 👨‍💻 Desarrollado por
 
-Paulo - [Tu GitHub](https://github.com/YOUR_USERNAME)
+Daniel - [Tu GitHub](https://github.com/YOUR_USERNAME)
 
 ## 🆘 Soporte
 
