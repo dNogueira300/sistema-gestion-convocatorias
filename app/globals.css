@@ -1,26 +1,74 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* Paleta mejorada y legible */
+    --cream: #f2efdf;
+    --light-blue: #8ed2df;
+    --red: #da002b;
+    --dark-red: #88011d;
+    --brown: #4f231c;
+  
+    /* Variables del sistema con mejor contraste */
+    --background: #f8f9fa;
+    --foreground: #212529;
+    --card: #ffffff;
+    --card-foreground: #212529;
+    --primary: #da002b;
+    --primary-foreground: #ffffff;
+    --secondary: #e9ecef;
+    --secondary-foreground: #495057;
+    --muted: #f8f9fa;
+    --muted-foreground: #6c757d;
+    --accent: #8ed2df;
+    --accent-foreground: #212529;
+    --border: #dee2e6;
   }
+  
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  }
+  
+  /* Mejorar el contraste de los componentes */
+  .bg-indigo-600 {
+    background-color: var(--red) !important;
+  }
+  
+  .hover\:bg-indigo-700:hover {
+    background-color: var(--dark-red) !important;
+  }
+  
+  .focus\:ring-indigo-500:focus {
+    --tw-ring-color: var(--red) !important;
+  }
+  
+  .focus\:border-indigo-500:focus {
+    border-color: var(--red) !important;
+  }
+  
+  .text-indigo-600 {
+    color: var(--red) !important;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.hover\:text-indigo-900:hover {
+  color: var(--dark-red) !important;
+}
+
+/* Mejorar la legibilidad de la sidebar */
+.bg-gray-800 {
+  background-color: var(--brown) !important;
+}
+.bg-gray-900 {
+  background-color: var(--dark-red) !important;
+}
+
+/* Cards y elementos */
+.bg-white {
+  background-color: var(--card);
+  color: var(--card-foreground);
+}
+
+.shadow {
+  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
 }

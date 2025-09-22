@@ -1,0 +1,103 @@
+// prisma/schema.prisma
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+  directUrl    = env("DIRECT_URL")
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  username  String   @unique
+  fullName  String
+  role      Role     @default(USER)
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // Relaciones
+  convocatorias Convocatoria[]
+  evaluaciones  EvaluacionTecnica[]
+
+  @@map("users")
+}
+
+model Convocatoria {
+  id                    String   @id @default(cuid())
+  tipo                  String
+  puesto                String
+  codigoPuesto          String
+  unidadOrganizacion    String
+  vacantes              Int      @default(1)
+  estado                EstadoConvocatoria @default(ACTIVA)
+  createdAt             DateTime @default(now())
+  updatedAt             DateTime @updatedAt
+
+  // Criterios personalizables para evaluación técnica
+  formulaNotaParcial              String @default("nota * 20 / 30")
+  formulaPuntajeEvaluacion        String @default("notaParcial * 0.3")
+  condicionAprobacion             String @default("notaParcial >= 13")
+  observacionesDisponibles        String[] @default(["NO ALCANZÓ EL PUNTAJE MÍNIMO APROBATORIO", "NO SE PRESENTÓ A LA EVALUACIÓN TÉCNICA", "DESCALIFICADO POR FALLA DE CONEXIÓN", "DESCALIFICADO POR INCURRIR FALTA EN EL MOMENTO DE LA EVALUACIÓN"])
+
+  // Relaciones
+  createdBy     User         @relation(fields: [createdById], references: [id])
+  createdById   String
+  postulantes   Postulante[]
+
+  @@map("convocatorias")
+}
+
+model Postulante {
+  id                String   @id @default(cuid())
+  documentoIdentidad String
+  nombreCompleto    String
+  fechaNacimiento   DateTime
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  // Relaciones
+  convocatoria        Convocatoria        @relation(fields: [convocatoriaId], references: [id], onDelete: Cascade)
+  convocatoriaId      String
+  evaluacionTecnica   EvaluacionTecnica?
+
+  @@unique([documentoIdentidad, convocatoriaId])
+  @@map("postulantes")
+}
+
+model EvaluacionTecnica {
+  id                      String   @id @default(cuid())
+  notaObtenida           Float    // 0-30
+  notaParcial            Float    // Calculado automáticamente
+  puntajeEvaluacion      Float    // Calculado automáticamente
+  condicion              CondicionEvaluacion
+  observaciones          String?
+  createdAt              DateTime @default(now())
+  updatedAt              DateTime @updatedAt
+
+  // Relaciones
+  postulante      Postulante @relation(fields: [postulanteId], references: [id], onDelete: Cascade)
+  postulanteId    String     @unique
+  evaluatedBy     User       @relation(fields: [evaluatedById], references: [id])
+  evaluatedById   String
+
+  @@map("evaluaciones_tecnicas")
+}
+
+enum Role {
+  ADMIN
+  USER
+}
+
+enum EstadoConvocatoria {
+  ACTIVA
+  INACTIVA
+}
+
+enum CondicionEvaluacion {
+  APTO
+  NO_APTO
+}
